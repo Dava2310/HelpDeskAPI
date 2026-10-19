@@ -1,12 +1,17 @@
 from fastapi import FastAPI
-from app.routers.test_router import router as test_router
 
-from typing import Annotated
-from fastapi import Depends
-from app.config import Settings, get_settings
+from contextlib import asynccontextmanager
+
+from app.routers.test_router import router as test_router
+from app.database import create_db_and_tables
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    create_db_and_tables()
+    yield
 
 # App definition
-app = FastAPI()
+app = FastAPI(lifespan=lifespan)
 
 # Inclusion of routers
 app.include_router(test_router)
@@ -15,8 +20,3 @@ app.include_router(test_router)
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"message": "Hello World"}
-
-# Environment test
-@app.get("/info")
-def info(settings: Annotated[Settings, Depends(get_settings)]):
-    return {"env": settings.environment}
