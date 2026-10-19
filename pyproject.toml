@@ -1,0 +1,13 @@
+[project]
+name = "fastapi-course"
+version = "0.1.0"
+description = "FastAPI"
+readme = "README.md"
+authors = [
+    { name = "Dava2310", email = "dvetencourt23@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi[standard]>=0.143.1",
+    "pydantic-settings>=2.16.0",
+]
